@@ -7,8 +7,10 @@ public class Video {
 	public static int estimateDuration(String video) {
 		String[] duration = video.split(":");
 		String hours = duration[0];
-		String minutes = duration[duration.length-1];
-		return (Integer.parseInt(hours)*60 + Integer.parseInt(minutes));
+		String minutes = duration[duration.length - 1];
+		int hrs = Integer.parseInt(hours);
+		int mins = Integer.parseInt(minutes);
+		return (((hrs >=0 && hrs < 1000) && (mins >= 0 && mins < 60)) ? (hrs*60 + mins) : 0);
 	}
 
 	public static void main(String[] args) {
@@ -19,8 +21,12 @@ public class Video {
 		do {
 			System.out.println("Print a video duration in format hours:minutes ");
 			video = sc.nextLine();
-			duration += estimateDuration(video);
-		} while(!video.equalsIgnoreCase(end) && video != null && video != "");
+			if (video.equalsIgnoreCase(end)) 
+				break;
+
+			duration += estimateDuration(video); 
+			
+		} while (video != null);
 		
 		int hours = duration / 60;
 		int minutes = duration % 60;
