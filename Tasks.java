@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Tasks {
 	public static final int NUMBER_OF_ELEMENTS = 100;
-	private static final int LOTTERY_NUMBERS = 6;
+	public static final int LOTTERY_NUMBERS = 6;
 
 	public static void decToBinary (byte decimal) {
 		int[] arr = new int[8];
