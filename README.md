@@ -1,1 +1,1 @@
-# ITStep
+# Trainee program
