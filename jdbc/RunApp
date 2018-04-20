@@ -1,0 +1,24 @@
+package com.seeburger.run;
+
+import com.ipstep.jdbc.CreateTables;
+import com.ipstep.jdbc.DatabaseConnection;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+public class RunApp {
+	
+	public static void main(String[] args) throws IOException {
+  Connection conn = null;
+        try {
+        	System.out.println(System.getProperty("user.dir"));
+        	DatabaseConnection db = DatabaseConnection.getInstance();
+        	conn = db.connectToDatabase();
+            CreateTables ct = new CreateTables();
+        	ct.createTable(conn); 
+        	
+        } catch(SQLException sqle) {
+        	sqle.printStackTrace();
+        }
+     }
+ }  
