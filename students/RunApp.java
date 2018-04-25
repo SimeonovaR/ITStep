@@ -28,5 +28,18 @@ public class RunApp {
 	       " & " + 
 	       " value is: "+me.getValue());
 	   }
-	}
+		
+		try {
+	    	int[] arr = {2, 2, 2, 5};
+		    Person person1 = new Student(481817, "Craig", "King", "cking7@cyberchimps.com", 19, 3, arr, "+35931088883");
+		    System.out.println(person1.study(20));
+		    System.out.println(((Student) person1).finalGrade(arr));
+	    } catch(InvalidAgeException e) {
+	    	e.printStackTrace();
+	    } catch(InvalidGradeException ge) {
+	    	ge.printStackTrace();
+	    } catch(RepeatTheClassException re) {
+	    	re.printStackTrace();
+	    }
+    }
 }
