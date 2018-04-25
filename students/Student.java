@@ -106,7 +106,7 @@ public class Student extends Person{
 		}
 	}
 	
-	public int finalGrade(int[] grades) throws InvalidGradeException, RepeatTheClassException {
+	public int getFinalGrade(int[] grades) throws InvalidGradeException, RepeatTheClassException {
 		boolean isValid = true;
 		int sum = 0;
 		int poorMarks = 0;
