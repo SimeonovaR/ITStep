@@ -6,61 +6,40 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Student {
+import com.seeburger.exceptions.InvalidAgeException;
+import com.seeburger.exceptions.InvalidGradeException;
+import com.seeburger.exceptions.RepeatTheClassException;
 
-	private String firstName;
-	private String lastName;
+public class Student extends Person{
+
 	private long fNum;
 	private int course;
-	private String email;
-	private int age;
 	private int group;
 	private int[] grades;
-	private String phone;
 	
 
-	@Override
-	public String toString() {
-		return fNum + ", " + firstName + ", " + lastName + ", " + email + ", " + age + ", " + group + ", " + grades[0] + ", " + grades[1] + ", " + grades[2] + ", " + grades[3] + ", " + phone;
-	}
-
 	public Student() {
-		System.out.println("from constructor");
+		super();
 	}
 
 	public Student(String firstName, String lastName, long fNum) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+		super(firstName, lastName);
 		this.fNum = fNum;
 	}
 	
 	public Student(long fNum, String firstName, String lastName, String email, int age, int group, int[] grades, String phone) {
-		this.fNum = fNum;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
+		super(firstName, lastName, age, email, phone);
+		this.fNum = fNum;		
+		this.group = group;	
+		this.grades = grades;
 		
-		if (age > 0 && age < 100) {
-			this.age = age;
-		}
-		this.group = group;
-		
-		boolean isValid = true;
-		for (int i = 0; i < grades.length && isValid; i++) {
-			if (grades[i] < 2 || grades[i] > 6) {
-				isValid = false;
-			}
-		}
-		if (isValid) {
-			this.grades = grades;
-		}
-		
-		if (phone.startsWith("+")) {
-			this.phone = phone;
-		} 
-		else {
-			this.phone = "Invalid phone number";
-		}
+	}
+	
+	
+	
+	@Override
+	public String toString() {
+		return fNum + ", " + super.getFirstName() + ", " + super.getLastName() + ", " + super.getEmail() + ", " + super.getAge() + ", " + group + ", " + grades[0] + ", " + grades[1] + ", " + grades[2] + ", " + grades[3] + ", " + super.getPhone();
 	}
 
 	public static ArrayList<Student> readStudentInfo() throws IOException {
@@ -117,26 +96,48 @@ public class Student {
 		return studentList;
 	}
 	
+	public int study(int age) throws InvalidAgeException {
+		if (age < 18) 
+			throw new InvalidAgeException("You are too young to participate in university");
+		else {
+			System.out.println("You can participate in university. You will graduate at the age of ");
+			age += 5;
+			return age;
+		}
+	}
+	
+	public int finalGrade(int[] grades) throws InvalidGradeException, RepeatTheClassException {
+		boolean isValid = true;
+		int sum = 0;
+		int poorMarks = 0;
+		for (int i = 0; i < grades.length && isValid; i++) {
+			sum += grades[i];
+			if(grades[i] == 2) {
+				poorMarks++;
+			}
+			if (grades[i] < 2 || grades[i] > 6) {
+				isValid = false;
+			}
+		}
+		if (poorMarks > 2) {
+			throw new RepeatTheClassException("You can not graduate because you have many poor marks.");
+		}
+		else {
+			if (isValid) {
+				return sum/grades.length;
+			}
+			else {
+				throw new InvalidGradeException("There is invalid grade input. Please enter grades between 1 and 6");
+			}
+		}
+		
+	}
+	
 	public int getCourse() {
 		return course;
 	}
 
 	public long getfNum() {
 		return fNum;
-	}
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 }
