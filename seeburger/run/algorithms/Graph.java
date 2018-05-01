@@ -33,12 +33,25 @@ public class Graph {
 		}
 		
 	}
-
-	public int getNumberOfVertices() {
-		return numberOfVertices;
-	}
 	
-	public Integer getAdjVertex(int v) {
-		return listOfAdjacent[v].get(v);
+	public void depthFirstSearch(int v) {
+		//mark all vertices as not visited 
+		boolean visitedNode[] = new boolean[numberOfVertices];
+		dfsUntil(v, visitedNode);
 	}
+
+	private void dfsUntil(int v, boolean[] visitedNode) {
+		// mark current node as visited and print it
+		visitedNode[v] = true;
+		System.out.print(v + " ");
+		
+		//recur for all the vertices adjacent to this vertex
+		Iterator<Integer> i = listOfAdjacent[v].listIterator();
+	    while (i.hasNext())
+	    {
+	        int n = i.next();
+	        if (!visitedNode[n])
+	            dfsUntil(n, visitedNode);
+	    }
+	}  
 }
