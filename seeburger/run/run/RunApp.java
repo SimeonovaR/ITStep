@@ -17,7 +17,11 @@ public class RunApp {
         Graph.addEdge(graph, 3, 4);
       
         Graph.printGraph(graph);
-        DFS.depthFirstSearch(graph, numOfVertices);
+        
+	Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the initial vertex of the graph: ");
+        int initialVertex = sc.nextInt();
+        graph.depthFirstSearch(initialVertex);
 	}
 	
 }
