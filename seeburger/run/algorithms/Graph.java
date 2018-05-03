@@ -53,5 +53,32 @@ public class Graph {
 	        if (!visitedNode[n])
 	            dfsUntil(n, visitedNode);
 	    }
-	}  
+	}
+	
+	public void breadthFirstSearch(int source) {
+		//mark all vertices as not visited
+		boolean visitedNode[] = new boolean[numberOfVertices];
+		
+		LinkedList<Integer> queue = new LinkedList<Integer>();
+		//mark the current node as visited and add to the queue
+		visitedNode[source] = true;
+		queue.add(source);
+		
+		while(queue.size() != 0) {
+			//poll a vertex from queue and print it
+			source = queue.poll();
+			System.out.print(source + " ");
+			
+			//get all the adjacent of the current source vertex
+			Iterator<Integer> i = listOfAdjacent[source].listIterator();
+			while(i.hasNext()) {
+				int n = i.next();
+				//if adjacent is not visited - mark it visited and add it to queue
+				if(!visitedNode[n]) {
+					visitedNode[n] = true;
+					queue.add(n);
+				}
+			}
+		}
+	}
 }
