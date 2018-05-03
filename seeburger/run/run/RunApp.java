@@ -6,7 +6,7 @@ import com.seeburger.algorithms.Graph;
 public class RunApp {
 	
 	public static void main(String[] args) {
-		int numOfVertices = 5;
+	int numOfVertices = 5;
         Graph graph = new Graph(numOfVertices);
         Graph.addEdge(graph, 0, 1);
         Graph.addEdge(graph, 0, 4);
@@ -18,10 +18,16 @@ public class RunApp {
       
         Graph.printGraph(graph);
         
-	Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the initial vertex of the graph: ");
-        int initialVertex = sc.nextInt();
+	int initialVertex;
+        do {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Enter a valid initial vertex of the graph: ");
+            initialVertex = sc.nextInt();
+        } while(initialVertex > numOfVertices || initialVertex < 0);
+
         graph.depthFirstSearch(initialVertex);
+        System.out.println();
+        graph.breadthFirstSearch(initialVertex);
 	}
 	
 }
