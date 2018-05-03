@@ -1,6 +1,5 @@
 package com.seeburger.run;
 
-import com.seeburger.algorithms.DFS;
 import com.seeburger.algorithms.Graph;
 
 public class RunApp {
