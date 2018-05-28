@@ -15,6 +15,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.seeburger.algorithms.graphs.Graph;
 import com.seeburger.algorithms.graphs.Town;
 
 public class RunXmlGraph {
@@ -38,15 +39,37 @@ public class RunXmlGraph {
             for (Town town : townList) {
                 System.out.println(town.toString());
             }
+            
+            //setting distances between towns
+           // townList.get(0).setDistance(150, townList.get(1)); 
+           // townList.get(0).setDistance(110, townList.get(7)); 
+           // townList.get(0).setDistance(120, townList.get(3));
+            
+            townList.get(0).addConnection(townList.get(1));
+            townList.get(0).addConnection(townList.get(3));
+            townList.get(0).addConnection(townList.get(7));
+            townList.get(1).addConnection(townList.get(2));
+            townList.get(1).addConnection(townList.get(6));
+            townList.get(2).addConnection(townList.get(3));
+            townList.get(2).addConnection(townList.get(4));
+            townList.get(6).addConnection(townList.get(7));
+            townList.get(6).addConnection(townList.get(5));
+            townList.get(5).addConnection(townList.get(2));
+            townList.get(5).addConnection(townList.get(4));
+
+            Town startTown = townList.get(1);
+            Town destTown = townList.get(5);
+            Graph graph = new Graph(startTown, destTown, townList);
+            graph.depthFirstSearch();
+          
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
         }
-
+        
     }
 
 
     private static Town getTown(Node node) {
-        //XMLReaderDOM domReader = new XMLReaderDOM();
         Town town = new Town();
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
