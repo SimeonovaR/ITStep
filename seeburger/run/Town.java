@@ -56,8 +56,8 @@ public class Town
 	
 	//get index position of the vertex
 	public int getPosition(List<Town> townList) {
-		//if (townList.indexOf(this) == -1)
-			// TODO: something for the -1 index
+		if (townList.indexOf(this) == -1)
+			townList.add(this);
 		   
 		return townList.indexOf(this);
 	} 
