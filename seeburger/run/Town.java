@@ -9,7 +9,7 @@ public class Town
 	// Any data members can be defined
 	private String name;
 	private double distnace;
-
+	
 	// Connectivity to other nodes
 	private List<Town> connections;
 
@@ -30,8 +30,9 @@ public class Town
 		return distnace;
 	}
 
-	public void setDistnace(double distnace) {
+	public void setDistance(double distnace, Town dest) {
 		this.distnace = distnace;
+		//dest.setDistance(this.distnace, this);
 	}
 
 	public void addConnection(Town n2)
@@ -53,6 +54,14 @@ public class Town
 		}
 	}
 	
+	//get index position of the vertex
+	public int getPosition(List<Town> townList) {
+		//if (townList.indexOf(this) == -1)
+			// TODO: something for the -1 index
+		   
+		return townList.indexOf(this);
+	} 
+	
 	public ArrayList<Town> getConnections() {
 
 		ArrayList<Town> list = new ArrayList<>();
@@ -68,11 +77,13 @@ public class Town
 	@Override
 	public boolean equals(Object other)
 	{
-		return (other instanceof Town) && (other == this);
+		return (other instanceof Town && other == this);
 	}
 	
 	@Override
 	public String toString() {
 		return name + " ";
 	}
+
+
 }
