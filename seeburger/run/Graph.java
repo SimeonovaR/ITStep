@@ -17,7 +17,6 @@ public class Graph {
 	
 	public void depthFirstSearch() {
 		//mark all vertices as not visited 
-		//boolean visitedNode[] = new boolean[this.getConnections().size()];
 		boolean visitedNode[] = new boolean[this.route.size()];
 		System.out.println("The depth first search traversal from " + this.start.getName() + " to " + this.end.getName() + " : ");
 		dfsUntil(start, visitedNode);
