@@ -1,84 +1,78 @@
-package com.seeburger.algorithms;
+package com.seeburger.algorithms.graphs;
 
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class Graph {
-	//represent a graph as array of linked lists, where the numberOfVertices is the size of listOfAdjacent
-	private int numberOfVertices;
-	private LinkedList<Integer>[] listOfAdjacent;
+	Town start;
+	Town end;
+	List<Town> route;
 	
-	public Graph(int v) {
-		numberOfVertices = v;
-		listOfAdjacent = new LinkedList[numberOfVertices];
-		for (int i = 0; i < numberOfVertices; i++) {
-			listOfAdjacent[i] = new LinkedList<>();
-		}
+	public Graph(Town start, Town end, List<Town> townList) {
+		this.start = start;
+		this.end = end;
+		this.route = townList;
 	}
 	
-	//add and edge to undirected graph
-	public static void addEdge(Graph graph, int v, int w) {
-		graph.listOfAdjacent[v].addFirst(w);
-		graph.listOfAdjacent[w].addFirst(v);
-	}
-	
-	
-	public static void printGraph(Graph gr) {
-		
-		for (int i = 0; i < gr.numberOfVertices; i++) {
-			System.out.print("Adjacency list of vertex "+ i);
-			for (Integer adj : gr.listOfAdjacent[i]) {
-				System.out.print(" - " + adj);
-			}
-			System.out.println();
-		}
-		
-	}
-	
-	public void depthFirstSearch(int v) {
+	public void depthFirstSearch() {
 		//mark all vertices as not visited 
-		boolean visitedNode[] = new boolean[numberOfVertices];
-		dfsUntil(v, visitedNode);
+		boolean visitedNode[] = new boolean[route.size()];
+		System.out.println("The depth first search traversal from " + this.start.getName() + " to " + this.end.getName() + " : ");
+		dfsUntil(start, visitedNode);
 	}
 
-	private void dfsUntil(int v, boolean[] visitedNode) {
+	private void dfsUntil(Town current, boolean[] visitedNode) {
 		// mark current node as visited and print it
-		visitedNode[v] = true;
-		System.out.print(v + " ");
+		visitedNode[current.getPosition(route)] = true;
+		System.out.print(current.getName() + " ");
 		
 		//recur for all the vertices adjacent to this vertex
-		Iterator<Integer> i = listOfAdjacent[v].listIterator();
-	    while (i.hasNext())
+		Iterator<Town> i = current.getConnections().listIterator();
+	    while (i.hasNext() ) 
 	    {
-	        int n = i.next();
-	        if (!visitedNode[n])
-	            dfsUntil(n, visitedNode);
+	    	if(!current.equals(end)) {
+	            Town n = i.next();
+
+	            if (!visitedNode[n.getPosition(route)])  
+	                dfsUntil(n, visitedNode); 
+	    	}
+	    	else {
+	    		System.exit(0);
+	    	}
 	    }
 	}
 	
-	public void breadthFirstSearch(int source) {
+	public void breadthFirstSearch() {
 		//mark all vertices as not visited
-		boolean visitedNode[] = new boolean[numberOfVertices];
-		
-		LinkedList<Integer> queue = new LinkedList<Integer>();
+		boolean visitedNode[] = new boolean[route.size()];
+		System.out.println("The breadth first search traversal from " + this.start.getName() + " to " + this.end.getName() + " : ");
+
+		Queue<Town> queue = new LinkedList<>();
 		//mark the current node as visited and add to the queue
-		visitedNode[source] = true;
-		queue.add(source);
+		visitedNode[start.getPosition(route)] = true;
+		queue.add(start);
 		
 		while(queue.size() != 0) {
 			//poll a vertex from queue and print it
-			source = queue.poll();
-			System.out.print(source + " ");
-			
+			start = queue.poll();
+			System.out.print(start + " ");
+
 			//get all the adjacent of the current source vertex
-			Iterator<Integer> i = listOfAdjacent[source].listIterator();
+			Iterator<Town> i = start.getConnections().listIterator();
+			if(start.equals(end))
+				break;
+			
 			while(i.hasNext()) {
-				int n = i.next();
+				
+				Town n = i.next();
 				//if adjacent is not visited - mark it visited and add it to queue
-				if(!visitedNode[n]) {
-					visitedNode[n] = true;
+				if(!visitedNode[n.getPosition(route)]) {
+					visitedNode[n.getPosition(route)] = true;
 					queue.add(n);
 				}
 			}
-		}
+		}    
 	}
 }
