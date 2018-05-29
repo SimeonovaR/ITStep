@@ -20,7 +20,7 @@ import com.seeburger.algorithms.graphs.Town;
 
 public class RunXmlGraph {
 	public static void main(String[] args) {
-        String filePath = "C:\\Users\\r.simeonova\\Desktop\\bgmap.xml";
+        String filePath = "C:\\Users\\MKA\\Desktop\\bgmap.xml";
         File xmlFile = new File(filePath);
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder;
@@ -57,10 +57,15 @@ public class RunXmlGraph {
             townList.get(5).addConnection(townList.get(2));
             townList.get(5).addConnection(townList.get(4));
 
-            Town startTown = townList.get(1);
-            Town destTown = townList.get(5);
+            Town startTown = townList.get(2);
+            Town destTown = townList.get(6);
             Graph graph = new Graph(startTown, destTown, townList);
-            graph.depthFirstSearch();
+            graph.breadthFirstSearch();
+            System.out.println();
+            startTown = townList.get(1);
+            destTown = townList.get(5);
+            Graph graph1 = new Graph(startTown, destTown, townList);
+            graph1.depthFirstSearch();
           
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
