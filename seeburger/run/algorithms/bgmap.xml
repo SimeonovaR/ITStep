@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<Towns>
+	<Town> 
+            <name> Sofia </name>  
+	</Town>
+
+	<Town>
+            <name> Plovdiv </name>
+	</Town>
+
+	<Town>
+            <name> Stara Zagora </name>
+	</Town>
+
+	<Town>
+            <name> Pleven </name>
+	</Town>
+
+	<Town>
+            <name> Burgas </name>
+	</Town>
+
+	<Town>
+            <name> Kardjali </name>
+	</Town>
+
+	<Town>
+            <name> Smolian </name>
+	</Town>
+
+	<Town>
+            <name> Blagoevgrad </name>
+	</Town>
+</Towns>
