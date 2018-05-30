@@ -1,16 +1,16 @@
-package com.seeburger.run;
+package com.seeburger.qa;
 
-import com.seeburger.qa.BigInteger;
+import java.util.Stack;
 
-public class RunApp {
-	
+public class RunBigInteger {
+
 	public static void main(String[] args) {
-        BigInteger b1= new BigInteger("645353");
-        BigInteger b2= new BigInteger("-210");
-        
-        BigInteger addResult = b1.add(b2);
-        System.out.println(b1 + " + " + b2 + " = " + addResult);
-
+		BigInteger bigInt1 = new BigInteger("69");
+		BigInteger bigInt2 = new BigInteger("98537");
+		
+		Stack add = bigInt1.addByModule(bigInt2);
+		while (!add.isEmpty()) {
+			System.out.println(add.pop());
+		}
 	}
-	
 }
