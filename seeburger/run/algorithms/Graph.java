@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.seeburger.exceptions.DestinationReachedException;
+
 public class Graph {
 	Town start;
 	Town end;
@@ -16,14 +18,14 @@ public class Graph {
 		this.route = townList;
 	}
 	
-	public void depthFirstSearch() {
+	public void depthFirstSearch() throws DestinationReachedException {
 		//mark all vertices as not visited 
 		boolean visitedNode[] = new boolean[route.size()];
 		System.out.println("The depth first search traversal from " + this.start.getName() + " to " + this.end.getName() + " : ");
 		dfsUntil(start, visitedNode);
 	}
 
-	private void dfsUntil(Town current, boolean[] visitedNode) {
+	private void dfsUntil(Town current, boolean[] visitedNode) throws DestinationReachedException{
 		// mark current node as visited and print it
 		visitedNode[current.getPosition(route)] = true;
 		System.out.print(current.getName() + " ");
@@ -39,7 +41,7 @@ public class Graph {
 	                dfsUntil(n, visitedNode); 
 	    	}
 	    	else {
-	    		System.exit(0);
+	    		throw new DestinationReachedException("The destination has been reached from the DFS traversal.");
 	    	}
 	    }
 	}
