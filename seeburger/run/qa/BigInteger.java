@@ -1,5 +1,7 @@
 package com.seeburger.qa;
 
+import java.util.Stack;
+
 public class BigInteger {
 	private String bigInt;
 	private boolean isNegative;
@@ -15,35 +17,36 @@ public class BigInteger {
 	}
 	
 		//compare lengths of digits in the BigInteger by absolute values  
-		public char compareAbsoluteValues(BigInteger bigInt2) {
+		public int compareAbsoluteValues(BigInteger bigInt2) {
 		    char[] bigint1 = this.bigInt.toCharArray();
 		    char[] bigint2 = bigInt2.bigInt.toCharArray();
 		    
 			if (bigint1.length < bigint2.length) 
-				return '<';
+				return -1;
 			else if (bigint1.length > bigint2.length) 
-				return '>';
+				return 1;
 			//if bigInt1 and bigInt2 have the same length
 			else {
 				//compare the bigInt elements with equal indexes
 				for (int i = 0; i < bigint1.length; i++) {
 					if (bigint1[i] < bigint2[i])
-						return '<';
+						return -1;
 					else if (bigint1[i] > bigint2[i]) 
-						return '>';
+						return 1;
 				}
 			}
-				return '=';
+				return 0;
 		}
 			
-		//compares two BigIntegers and returns '=', '<' or '>' 
-		public char compare(BigInteger bigInt2) {
+		//compares two BigIntegers and returns a negative integer, zero, or a positive integer 
+		//as the first argument is less than, equal to, or greater than the second 
+		public int compare(BigInteger bigInt2) {
 			// negative number is always < positive number
 			if ((this.isNegative == true) && (bigInt2.isNegative == false)) {
-				return '<';
+				return -1;
 			//positive number is > negative
 			} else if ((this.isNegative == false) && (bigInt2.isNegative == true)) {
-				return '>';
+				return 1;
 			}
 			// positive numbers 
 			else if ((this.isNegative == false) && (bigInt2.isNegative == false)){
@@ -53,11 +56,48 @@ public class BigInteger {
 			return bigInt2.compareAbsoluteValues(this);
 		}
 		
-		public BigInteger addByModule(BigInteger bigInt2) {
-			char[] smaller = (this.compareAbsoluteValues(bigInt2) == '<' ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
-			char[] bigger = (this.compareAbsoluteValues(bigInt2) == '>' ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
-					
-			return bigInt2;
+		
+		public Stack<Integer> addByModule(BigInteger bigInt2) {
+			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+			
+			//keeps the sum of BigIntegers
+			Stack<Integer> additionResult = new Stack<>();
+			Integer digitSum;
+			int reminder = 0;
+			
+			//iterate digits in the BigIntegers conversely, add them and push the result in the stack 
+			for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
+				digitSum = Character.getNumericValue(smaller[i]) + Character.getNumericValue(bigger[j]);
+				if (reminder != 0) {
+					digitSum += reminder;
+					reminder = 0;
+				}
+					if (digitSum >= 10) {
+						additionResult.push(digitSum%10);
+						reminder = digitSum/10;
+					}
+					else {
+						additionResult.push(digitSum);
+					}
+					//when we reach the initial digit of the smaller, push the rest of the bigger
+					if(i == 0) {
+						if(smaller.length != bigger.length) {
+							j--;
+							while(j >= 0) {
+								additionResult.push(Character.getNumericValue(bigger[j])+reminder);
+								j--;
+								reminder = 0;
+								}
+						}
+						else {
+							if(reminder != 0){
+								additionResult.push(reminder);
+							}
+						}
+					}
+			}
+			return additionResult;
 		}
 		
 		@Override
@@ -65,4 +105,3 @@ public class BigInteger {
 	          return "(" + this.bigInt + ")";
 	       }
 }
-
