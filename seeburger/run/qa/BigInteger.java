@@ -100,6 +100,34 @@ public class BigInteger {
 			return additionResult;
 		}
 		
+		public Stack<Integer> subtractByModule(BigInteger bigInt2) {
+			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+			
+			//keeps the subtract of BigIntegers
+			Stack<Integer> subtractResult = new Stack<>();
+			Integer digitSubtract = 0;
+			int reminder = 0;
+			
+			if (smaller.equals(bigInt2.bigInt.toCharArray())) {
+				for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
+					digitSubtract -= reminder;
+					if (Character.getNumericValue(bigger[j]) < Character.getNumericValue(smaller[i])) {
+						digitSubtract = (Character.getNumericValue(bigger[j])+10 - Character.getNumericValue(smaller[i]));
+						reminder += 1;
+					}
+				}
+			}
+			else if (smaller.equals(this.bigInt.toCharArray())) {
+				//
+			}
+			else { 
+				digitSubtract = 0;
+				subtractResult.push(digitSubtract);
+			}
+			return subtractResult;
+		}
+	
 		@Override
 		public String toString() { 
 	          return "(" + this.bigInt + ")";
