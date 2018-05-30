@@ -17,6 +17,7 @@ import org.xml.sax.SAXException;
 
 import com.seeburger.algorithms.graphs.Graph;
 import com.seeburger.algorithms.graphs.Town;
+import com.seeburger.exceptions.DestinationReachedException;
 
 public class RunXmlGraph {
 	public static void main(String[] args) {
@@ -65,14 +66,18 @@ public class RunXmlGraph {
             startTown = townList.get(1);
             destTown = townList.get(5);
             Graph graph1 = new Graph(startTown, destTown, townList);
-            graph1.depthFirstSearch();
+            try {
+				graph1.depthFirstSearch();
+			} catch (DestinationReachedException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e.getMessage());
+			}
           
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
         }
         
     }
-
 
     private static Town getTown(Node node) {
         Town town = new Town();
@@ -83,7 +88,6 @@ public class RunXmlGraph {
 
         return town;
     }
-
 
     private static String getTagValue(String tag, Element element) {
         NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
