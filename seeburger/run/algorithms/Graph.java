@@ -47,7 +47,7 @@ public class Graph {
 	}
 	
 	public void breadthFirstSearch() {
-		//mark all vertices as not visited
+		//mark all nodes as not visited
 		boolean visitedNode[] = new boolean[route.size()];
 		System.out.println("The breadth first search traversal from " + this.start.getName() + " to " + this.end.getName() + " : ");
 
@@ -61,7 +61,7 @@ public class Graph {
 			start = queue.poll();
 			System.out.print(start + " ");
 
-			//get all the adjacent of the current source vertex
+			//get all the conections of the current source vertex
 			Iterator<Town> i = start.getConnections().listIterator();
 			if(start.equals(end))
 				break;
@@ -69,7 +69,7 @@ public class Graph {
 			while(i.hasNext()) {
 				
 				Town n = i.next();
-				//if adjacent is not visited - mark it visited and add it to queue
+				//if connection is not visited - mark it visited and add it to queue
 				if(!visitedNode[n.getPosition(route)]) {
 					visitedNode[n.getPosition(route)] = true;
 					queue.add(n);
