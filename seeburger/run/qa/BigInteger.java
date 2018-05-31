@@ -1,6 +1,6 @@
 package com.seeburger.qa;
 
-import java.util.Stack;
+import java.util.Arrays;
 
 public class BigInteger {
 	private String bigInt;
@@ -17,7 +17,7 @@ public class BigInteger {
 	}
 	
 		//compare lengths of digits in the BigInteger by absolute values  
-		public int compareAbsoluteValues(BigInteger bigInt2) {
+		private int compareAbsoluteValues(BigInteger bigInt2) {
 		    char[] bigint1 = this.bigInt.toCharArray();
 		    char[] bigint2 = bigInt2.bigInt.toCharArray();
 		    
@@ -57,15 +57,14 @@ public class BigInteger {
 		}
 		
 		
-		public Stack<Integer> addByModule(BigInteger bigInt2) {
+		private BigInteger addByModule(BigInteger bigInt2) {
 			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			
 			//keeps the sum of BigIntegers
-			Stack<Integer> additionResult = new Stack<>();
+			StringBuilder additionResult = new StringBuilder();
 			Integer digitSum;
 			int reminder = 0;
-			
 			//iterate digits in the BigIntegers conversely, add them and push the result in the stack 
 			for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
 				digitSum = Character.getNumericValue(smaller[i]) + Character.getNumericValue(bigger[j]);
@@ -74,80 +73,137 @@ public class BigInteger {
 					reminder = 0;
 				}
 					if (digitSum >= 10) {
-						additionResult.push(digitSum%10);
+						additionResult.append(digitSum%10);
 						reminder = digitSum/10;
 					}
 					else {
-						additionResult.push(digitSum);
+						additionResult.append(digitSum);
 					}
 					//when we reach the initial digit of the smaller, push the rest of the bigger
 					if(i == 0) {
 						if(smaller.length != bigger.length) {
 							j--;
 							while(j >= 0) {
-								additionResult.push(Character.getNumericValue(bigger[j])+reminder);
+								additionResult.append(Character.getNumericValue(bigger[j])+reminder);
 								j--;
 								reminder = 0;
 								}
 						}
 						else {
 							if(reminder != 0){
-								additionResult.push(reminder);
+								additionResult.append(reminder);
 							}
 						}
 					}
 			}
-			return additionResult;
+			BigInteger result = new BigInteger(additionResult.reverse().toString());
+			return result;
 		}
 		
-				public Stack<Integer> subtractByModule(BigInteger bigInt2) {
+		private BigInteger subtractByModule(BigInteger bigInt2) {
+			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
+
+			BigInteger subtractResult; 
+			//|x| - |y|, y < x
+			if (Arrays.equals(smaller,(bigInt2.bigInt.toCharArray()))) {
+				String simpleSub = this.simpleSubtraction(bigInt2);
+				subtractResult = new BigInteger(simpleSub); 
+			}
+			//|x| - |y|, x < y
+			else if (Arrays.equals(bigger,(bigInt2.bigInt.toCharArray()))) {
+				String simpleSub = bigInt2.simpleSubtraction(this);
+				subtractResult = new BigInteger(simpleSub); 
+				subtractResult.isNegative = true;
+			}
+			//|x| - |y|, x = y
+			else { 
+				String simpleSub = bigInt2.simpleSubtraction(this).substring(0, 1);
+				subtractResult = new BigInteger(simpleSub); 
+			}  
+			return subtractResult;
+		} 
+		
+		//helper method used for this case : |current| - |other| > 0
+		private String simpleSubtraction(BigInteger bigInt2) {
 			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			
 			//keeps the subtract of BigIntegers
-			Stack<Integer> subtractResult = new Stack<>();
+			StringBuilder subtractResult = new StringBuilder();
 			Integer digitSubtract = 0;
 			int reminder = 0;
 			
-			if (smaller.equals(bigInt2.bigInt.toCharArray())) {
-				for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
-					if (Character.getNumericValue(bigger[j]) < Character.getNumericValue(smaller[i])) {
-						digitSubtract = (Character.getNumericValue(bigger[j])+10 - Character.getNumericValue(smaller[i])-reminder);
-						reminder = 1;
-					}
-					else {
-						digitSubtract = (Character.getNumericValue(bigger[j]) - Character.getNumericValue(smaller[i]) - reminder);
-					}
-				    subtractResult.push(digitSubtract);
-				    if (i == 0) { 
-				    	j--;
-				    	while (j >= 0) {
-						    subtractResult.push(bigger[j] - reminder);
-						    reminder = 0;
-						    j--;
-				    	}
-				    }
+			for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
+				if (Character.getNumericValue(bigger[j])-reminder < Character.getNumericValue(smaller[i])) {
+					digitSubtract = (Character.getNumericValue(bigger[j])+10 - Character.getNumericValue(smaller[i])-reminder);
+					reminder = 1;
 				}
+				else {
+					digitSubtract = (Character.getNumericValue(bigger[j]) - Character.getNumericValue(smaller[i]) - reminder);
+					reminder = 0;
+				}
+			    subtractResult.append(digitSubtract);
+			    if (i == 0) { 
+			    	j--;
+			    	while (j >= 0) {
+			    		digitSubtract = Character.getNumericValue(bigger[j]) - reminder;
+					    subtractResult.append(digitSubtract);
+					    reminder = 0;
+					    j--;
+			    	}
+			    }
 			}
-			else //if(smaller.equals(this.bigInt.toCharArray())) 
-			{
-				subtractResult = simpleSubtraction(bigInt2.bigInt.toCharArray());
-				subtractResult.push(-1);
+			return subtractResult.reverse().toString();
+		} 
+		
+		public BigInteger add(BigInteger bigInt2) {
+			BigInteger smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this : bigInt2);
+			BigInteger bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this : bigInt2);
+			
+			BigInteger result;
+			if (!this.isNegative && !bigInt2.isNegative) 
+				result = this.addByModule(bigInt2);
+			else if (this.isNegative && bigInt2.isNegative) {
+				result = this.addByModule(bigInt2);
+				result.isNegative = true;
 			}
-			/*else { 
-				digitSubtract = 0;
-				subtractResult.push(digitSubtract);
-			}  */
-			return subtractResult;
+			else if (!bigger.isNegative && smaller.isNegative) {
+				result = bigger.subtractByModule(smaller);
+			}
+			else {
+				result = bigger.subtractByModule(smaller);
+				result.isNegative = true;
+			}
+			return result;
 		}
 		
-		private Stack<Integer> simpleSubtraction(char[] charArray) {
-			// TODO Auto-generated method stub
-			return 0;
+		public BigInteger subtract(BigInteger bigInt2) {
+			BigInteger smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this : bigInt2);
+			BigInteger bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this : bigInt2);
+			
+			BigInteger result;
+			if (this.isNegative && !bigInt2.isNegative) {
+				result = this.addByModule(bigInt2);
+				result.isNegative = true;
+			}
+			else if (!this.isNegative && bigInt2.isNegative) {
+				result = this.addByModule(bigInt2);
+			}
+			else if ((this.equals(bigger) && !this.isNegative) || (this.equals(smaller) && this.isNegative)) {
+				result = this.subtractByModule(bigInt2);
+			}
+			else {
+				result = this.subtractByModule(bigInt2);
+				result.isNegative = true;
+			}
+			return result;
 		}
-	
+		
 		@Override
 		public String toString() { 
+			  if(this.isNegative)
+				  return "-(" + this.bigInt + ")";
 	          return "(" + this.bigInt + ")";
 	       }
 }
