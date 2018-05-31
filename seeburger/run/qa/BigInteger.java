@@ -100,7 +100,7 @@ public class BigInteger {
 			return additionResult;
 		}
 		
-		public Stack<Integer> subtractByModule(BigInteger bigInt2) {
+				public Stack<Integer> subtractByModule(BigInteger bigInt2) {
 			char[] smaller = (this.compareAbsoluteValues(bigInt2) < 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			char[] bigger = (this.compareAbsoluteValues(bigInt2) > 0 ? this.bigInt.toCharArray() : bigInt2.bigInt.toCharArray());
 			
@@ -111,21 +111,39 @@ public class BigInteger {
 			
 			if (smaller.equals(bigInt2.bigInt.toCharArray())) {
 				for(int i = smaller.length - 1, j = bigger.length - 1; i >= 0; i--, j--) {
-					digitSubtract -= reminder;
 					if (Character.getNumericValue(bigger[j]) < Character.getNumericValue(smaller[i])) {
-						digitSubtract = (Character.getNumericValue(bigger[j])+10 - Character.getNumericValue(smaller[i]));
-						reminder += 1;
+						digitSubtract = (Character.getNumericValue(bigger[j])+10 - Character.getNumericValue(smaller[i])-reminder);
+						reminder = 1;
 					}
+					else {
+						digitSubtract = (Character.getNumericValue(bigger[j]) - Character.getNumericValue(smaller[i]) - reminder);
+					}
+				    subtractResult.push(digitSubtract);
+				    if (i == 0) { 
+				    	j--;
+				    	while (j >= 0) {
+						    subtractResult.push(bigger[j] - reminder);
+						    reminder = 0;
+						    j--;
+				    	}
+				    }
 				}
 			}
-			else if (smaller.equals(this.bigInt.toCharArray())) {
-				//
+			else //if(smaller.equals(this.bigInt.toCharArray())) 
+			{
+				subtractResult = simpleSubtraction(bigInt2.bigInt.toCharArray());
+				subtractResult.push(-1);
 			}
-			else { 
+			/*else { 
 				digitSubtract = 0;
 				subtractResult.push(digitSubtract);
-			}
+			}  */
 			return subtractResult;
+		}
+		
+		private Stack<Integer> simpleSubtraction(char[] charArray) {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 	
 		@Override
