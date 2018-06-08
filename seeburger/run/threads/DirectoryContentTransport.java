@@ -4,8 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 public class DirectoryContentTransport {
-
-	
+        private File source;
+        private File dest;
+    
+        public boolean isEmptyDirectory() {
+    	    return source.listFiles().length <= 0;
+        }
 	public static void moveFiles(File source, File dest) throws IOException {
 		//get a list of files in  source directory
 		File[] files = source.listFiles(); 
