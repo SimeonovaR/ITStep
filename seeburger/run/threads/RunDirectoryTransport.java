@@ -10,9 +10,9 @@ public class RunDirectoryTransport {
     private static boolean running = true;
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
-	static File source = new File("C:" + File.separator + "Users" + File.pathSeparator + "r.simeonova"
-			+ File.pathSeparator + "Documents" + File.pathSeparator + "New Folder");
-    static File dest = new File("C:" + File.separator + "Users" + File.separator + "r.simeonova" 
+	static File source = new File("C:" + File.separator + "Users" + File.separator + "MKA" 
+            + File.separator + "Desktop" + File.separator + "NIKI KOD");
+    static File dest = new File("C:" + File.separator + "Users" + File.separator + "MKA" 
             + File.separator + "Desktop" + File.separator + "ralitsa");
     
 	public static void main(String[] args) throws IOException {
@@ -23,14 +23,9 @@ public class RunDirectoryTransport {
             	if ((reader.readLine()).equals("end")) {
             		running = false;
             	}
-            	else {
-                    if(!transportThread.isEmptyDirectory()) {
-                    	transportThread.notify();
-                    }
-            	}
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        } 
 	}
 }
