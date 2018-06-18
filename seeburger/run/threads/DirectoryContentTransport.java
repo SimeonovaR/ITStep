@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class DirectoryContentTransport extends Thread {
+	private Thread transportThread;
 	private File source;
 	private File dest;
 	
@@ -13,15 +14,22 @@ public class DirectoryContentTransport extends Thread {
 	}
 	
 	@Override
+	public void start() {
+	    if (transportThread == null) {
+	         transportThread = new Thread(this);
+	         transportThread.start();
+	      }
+	}
+	@Override
     public void run() {
-		while (true) {
+
 			try {
 				this.reachBottomOfDirectory(source.getAbsolutePath());
 				Thread.sleep(10000);
-			} catch (InterruptedException | IOException e) {
+			} catch (IOException | InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
+		
     } 
 	
 	public boolean isEmptyDirectory() {
@@ -47,12 +55,14 @@ public class DirectoryContentTransport extends Thread {
 	public void reachBottomOfDirectory(String filePath) throws IOException {
 		File folder = new File(filePath);
 		File[] listOfFiles = folder.listFiles();
+		if(listOfFiles.length != 0) {
 		for (File file : listOfFiles) {
 			if (file.isDirectory() && !file.isHidden()) {
 				System.out.println(file.getAbsolutePath());
 				moveFiles(source, dest);
 				this.reachBottomOfDirectory(file.getAbsolutePath());
 			}
+		}
 		}
 	}
 
