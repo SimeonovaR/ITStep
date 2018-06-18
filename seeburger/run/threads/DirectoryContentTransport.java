@@ -14,8 +14,15 @@ public class DirectoryContentTransport extends Thread {
 	
 	@Override
     public void run() {
-
-    }
+		while (true) {
+			try {
+				this.reachBottomOfDirectory(source.getAbsolutePath());
+				Thread.sleep(10000);
+			} catch (InterruptedException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+    } 
 	
 	public boolean isEmptyDirectory() {
 		return (this.source.listFiles().length <= 0);
@@ -37,19 +44,15 @@ public class DirectoryContentTransport extends Thread {
 		}
 	}
 	
-	public synchronized void reachBottomOfDirectory(String filePath) throws IOException, InterruptedException {
-		notify();
+	public void reachBottomOfDirectory(String filePath) throws IOException {
 		File folder = new File(filePath);
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
-			if (file.isDirectory()) {
+			if (file.isDirectory() && !file.isHidden()) {
 				System.out.println(file.getAbsolutePath());
-				moveFiles(file, this.dest);
+				moveFiles(source, dest);
 				this.reachBottomOfDirectory(file.getAbsolutePath());
 			}
-		}
-		while (this.isEmptyDirectory()) {
-			wait();
 		}
 	}
 
