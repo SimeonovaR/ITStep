@@ -6,27 +6,28 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class RunDirectoryTransport {
-	
-    private static volatile boolean running = true;
-    private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
-	static File source = new File("C:" + File.separator + "Users" + File.separator + "MKA" 
-            + File.separator + "Desktop" + File.separator + "NIKI KOD");
-    static File dest = new File("C:" + File.separator + "Users" + File.separator + "MKA" 
-            + File.separator + "Desktop" + File.separator + "ralitsa");
-    
-	public static void main(String[] args) throws IOException {
-        DirectoryContentTransport transportThread = new DirectoryContentTransport(source, dest);
-        //transportThread.start();
-    	try {
-            while (running) {
-            	transportThread.start();
-              	 if ((reader.readLine()).equals("end")) {
-               		running = false;
-                  }         	
-            }       
-        } catch (IOException e) {
-            e.printStackTrace();
-        } 
-	}
+	   private static volatile boolean running = true;
+	   private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+	   
+	    static File source = new File("C:" + File.separator + "Users" + File.separator + "MKA"
+	           + File.separator + "Desktop" + File.separator + "NIKI KOD");
+	   static File dest = new File("C:" + File.separator + "Users" + File.separator + "MKA"
+	           + File.separator + "Desktop" + File.separator + "ralitsa");
+	   
+	    public static void main(String[] args) throws IOException {
+	       DirectoryContentTransport transportThread = new DirectoryContentTransport(source, dest);
+	       transportThread.start();
+	       try {
+				if ((reader.readLine()).equals("end")) {
+					running = false;
+				}
+	       } catch (IOException e) {
+	           e.printStackTrace();
+	       } 
+	    }
+
+		public static boolean isRunning() {
+			return running;
+		}
 }
