@@ -3,76 +3,78 @@ package com.seeburger.threads;
 import java.io.File;
 import java.io.IOException;
 
+
 public class DirectoryContentTransport extends Thread {
-	private Thread transportThread;
-	private File source;
-	private File dest;
+    private Thread transportThread;
+    private File source;
+    private File dest;
 
-	public DirectoryContentTransport(File source, File dest) {
-		this.source = source;
-		this.dest = dest;
-	}
+    public DirectoryContentTransport(File source, File dest) {
+        this.source = source;
+        this.dest = dest;
+    }
 
-	@Override
-	public void start() {
+    @Override
+    public void start() {
 
-			transportThread = new Thread(this);
-			transportThread.start();
-		
-	}
+        transportThread = new Thread(this);
+        transportThread.start();
 
-	@Override
-	public void run() {
+    }
 
-		try {
-			while (!isEmptyDirectory()) {
-				this.reachBottomOfDirectory(source.getAbsolutePath());
-			}
-			Thread.sleep(20000);
-			
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void run() {
 
-	public boolean isEmptyDirectory() {
-		return (this.source.listFiles().length <= 0);
-	}
+        try {
+            while (RunDirectoryTransport.isRunning() == true) {
+                if (!isEmptyDirectory()) {
+                    this.reachBottomOfDirectory(source.getAbsolutePath());
+                }
+                Thread.sleep(2000);
+            }
 
-	private static void moveFiles(File source, File dest) throws IOException {
-		// get a list of files in source directory
-		File[] files = source.listFiles();
-		// for each file in the source directory -> move
-		for (File file : files) {
-			System.out.println(source + File.separator + file.getName());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
-			String srcFile = (source + File.separator + file.getName());
-			String newDestFile = (dest + File.separator + file.getName());
+    public boolean isEmptyDirectory() {
+        return (this.source.listFiles().length <= 0);
+    }
 
-			File newFile = new File(srcFile);
-			// renames the file which is specified
-			newFile.renameTo(new File(newDestFile));
-		}
-	}
+    private static void moveFiles(File source, File dest) throws IOException {
+        // get a list of files in source directory
+        File[] files = source.listFiles();
+        // for each file in the source directory -> move
+        for (File file : files) {
+            System.out.println(source + File.separator + file.getName());
 
-	public void reachBottomOfDirectory(String filePath) throws IOException {
-		File folder = new File(filePath);
-		File[] listOfFiles = folder.listFiles();
-		if (listOfFiles.length > 0) {
-			for (File file : listOfFiles) {
-				if (file.isDirectory() && !file.isHidden()) {
-					System.out.println(file.getAbsolutePath());
-					moveFiles(source, dest);
-					this.reachBottomOfDirectory(file.getAbsolutePath());
-				}
-				else {
-					moveFiles(file.getParentFile(), dest);
-				}
-			}
-		}
-	}
+            String srcFile = (source + File.separator + file.getName());
+            String newDestFile = (dest + File.separator + file.getName());
 
-	public File getSource() {
-		return source;
-	}
+            File newFile = new File(srcFile);
+            // renames the file which is specified
+            newFile.renameTo(new File(newDestFile));
+        }
+    }
+
+    public void reachBottomOfDirectory(String filePath) throws IOException {
+        File folder = new File(filePath);
+        File[] listOfFiles = folder.listFiles();
+
+        for (File file : listOfFiles) {
+            if (file.isDirectory() && !file.isHidden() && file.length() > 0) {
+                System.out.println(file.getAbsolutePath());
+                moveFiles(source, dest);
+                this.reachBottomOfDirectory(file.getAbsolutePath());
+            } else {
+                moveFiles(file.getParentFile(), dest);
+            }
+        }
+
+    }
+
+    public File getSource() {
+        return source;
+    }
 }
