@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 public class RunDirectoryTransport {
 	
-    private static boolean running = true;
+    private static volatile boolean running = true;
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     
 	static File source = new File("C:" + File.separator + "Users" + File.separator + "MKA" 
@@ -17,13 +17,14 @@ public class RunDirectoryTransport {
     
 	public static void main(String[] args) throws IOException {
         DirectoryContentTransport transportThread = new DirectoryContentTransport(source, dest);
-        transportThread.start();
+        //transportThread.start();
     	try {
             while (running) {
-            	if ((reader.readLine()).equals("end")) {
-            		running = false;
-            	}
-            }
+            	transportThread.start();
+              	 if ((reader.readLine()).equals("end")) {
+               		running = false;
+                  }         	
+            }       
         } catch (IOException e) {
             e.printStackTrace();
         } 
