@@ -6,28 +6,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class RunDirectoryTransport {
-    
-	   private static volatile boolean running = true;
-	   private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-	   
-	    static File source = new File("C:" + File.separator + "Users" + File.separator + "MKA"
-	           + File.separator + "Desktop" + File.separator + "NIKI KOD");
-	   static File dest = new File("C:" + File.separator + "Users" + File.separator + "MKA"
-	           + File.separator + "Desktop" + File.separator + "ralitsa");
-	   
-	    public static void main(String[] args) throws IOException {
-	       DirectoryContentTransport transportThread = new DirectoryContentTransport(source, dest);
-	       transportThread.start();
-	       try {
-				if ((reader.readLine()).equals("end")) {
-					running = false;
-				}
-	       } catch (IOException e) {
-	           e.printStackTrace();
-	       } 
-	    }
 
-		public static boolean isRunning() {
-			return running;
+	// private static volatile boolean running = true;
+	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+	static File source = new File("D:" + File.separator + "proekt Front-end web");
+	static File dest = new File("C:" + File.separator + "Users" + File.separator + "Ralitsa" + File.separator
+			+ "Desktop" + File.separator + "ralitsa");
+
+	public static void main(String[] args) throws IOException {
+		DirectoryContentTransport dirTransport = new DirectoryContentTransport(source, dest);
+        Thread transportThread = new Thread(dirTransport);
+        transportThread.start();
+        
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
 		}
+
+		try {
+			if ((reader.readLine()).equals("end")) {
+				transportThread.interrupt();
+			}
+			transportThread.join();
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
