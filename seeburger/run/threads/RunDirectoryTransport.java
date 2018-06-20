@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 
 public class RunDirectoryTransport {
 
-	// private static volatile boolean running = true;
 	private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
 	static File source = new File("D:" + File.separator + "proekt Front-end web");
@@ -18,12 +17,6 @@ public class RunDirectoryTransport {
 		DirectoryContentTransport dirTransport = new DirectoryContentTransport(source, dest);
         Thread transportThread = new Thread(dirTransport);
         transportThread.start();
-        
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		}
 
 		try {
 			if ((reader.readLine()).equals("end")) {
