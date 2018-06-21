@@ -1,6 +1,6 @@
 package com.seeburger.algorithms.graphs;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class Town
 
 	public Town()
 	{
-		this.connections = new ArrayList<Road>();
+		this.connections = new LinkedList<Road>();
 	}
 
 	public String getName() {
@@ -29,34 +29,32 @@ public class Town
 
 	public void addConnection(Road n2)
 	{
-		if (!this.connections.contains(n2))
+		if ((!this.connections.contains(n2.getTown1())) || !(this.connections.contains(n2.getTown2())))
 		{
 			this.connections.add(n2);
-			n2.addConnection(this);
+			n2.getTown2().addConnection(new Road(n2.getTown2(), this, n2.getDistnace()));
 		}
 	}
 
-	// TODO: removeConnection, other methods, getConnections, iterator
-
-	public void removeConnection(Town n2) {
+	public void removeConnection(Road n2) {
 		if (this.connections.contains(n2))
 		{
 			this.connections.remove(n2);
-			n2.removeConnection(this);
+			n2.getTown2().removeConnection(new Road(n2.getTown2(), this, n2.getDistnace()));
 		}
 	}
 
 	//get index position of the vertex
-	public int getPosition(List<Town> townList) {
+/*	public int getPosition(List<Town> townList) {
 		if (townList.indexOf(this) == -1)
 			townList.add(this);
 
 		return townList.indexOf(this);
-	}
+	}*/
 
-	public ArrayList<Town> getConnections() {
+	public List<Road> getConnections() {
 
-		ArrayList<Town> list = new ArrayList<>();
+		List<Road> list = new LinkedList<>();
 		Iterator<Road> i = connections.listIterator();
 	    while (i.hasNext())
 	    {
@@ -84,6 +82,4 @@ public class Town
 	public void setCurrentDistance(double currentDistance) {
 		this.currentDistance = currentDistance;
 	}
-
-
 }
