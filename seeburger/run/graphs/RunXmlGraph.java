@@ -3,6 +3,7 @@ package com.seeburger.run;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,17 +37,27 @@ public class RunXmlGraph {
             //now XML is loaded as Document in memory, lets convert it to Object List
             List<Road> roadList = new ArrayList<Road>();
             for (int i = 0; i < nodeList.getLength(); i++) {
-                roadList.add(getRoad(nodeList.item(i)));
+            	Road r = getRoad(nodeList.item(i));
+                roadList.add(r);
             }
             //lets print Road list information
             for (Road road : roadList) {
                 System.out.println(road.toString());
             }
 
-            Town startTown = roadList.get(0).getTown1();
-            for (Road road : startTown.getConnections()) {
+            System.out.println();
+//    		Iterator<Road> roads = roadList.iterator();
+//    		while (roads.hasNext()) {
+//    			Road n = roads.next();
+//    			n.getTown1().addConnection(n);
+//    		}
+//TODO member set za visited towns, za da ne se syzdava nov vseki pyt
+            //predefinirane na hashcode za road i town
+            for (Road road : roadList.get(0).getTown1().getConnections()) {
                 System.out.println(road.toString());
             }
+
+
             /*Town destTown = townList.get(6);
             Graph graph = new Graph(startTown, destTown, townList);
             graph.breadthFirstSearch();
@@ -60,24 +71,24 @@ public class RunXmlGraph {
 				// TODO Auto-generated catch block
 				System.out.println(e.getMessage());
 			} */
-          
+
         } catch (SAXException | ParserConfigurationException | IOException e1) {
             e1.printStackTrace();
         }
-        
+
     }
 
     private static Road getRoad(Node node) {
         Town town1 = new Town();
         Town town2 = new Town();
         Double distance = 0.0;
-     
+
         if (node.getNodeType() == Node.ELEMENT_NODE) {
             Element element = (Element) node;
             town1.setName(getTagValue("start", element));
             town2.setName(getTagValue("destination", element));
-            distance = Double.parseDouble(getAttrValue("distance", element)); 
-        }	
+            distance = Double.parseDouble(getAttrValue("distance", element));
+        }
 
         return new Road(town1, town2, distance);
     }
@@ -86,7 +97,7 @@ public class RunXmlGraph {
     	String distance = element.getAttribute("distance");
         return distance;
     }
-    
+
     private static String getTagValue(String tag, Element element) {
         NodeList nodeList = element.getElementsByTagName(tag).item(0).getChildNodes();
         Node node = (Node) nodeList.item(0);
