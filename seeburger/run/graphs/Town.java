@@ -1,11 +1,11 @@
 package com.seeburger.algorithms.graphs;
 
 import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class Town
-{
+public class Town {
 	// Any data members can be defined
 	private String name;
 
@@ -14,9 +14,8 @@ public class Town
 	// Connectivity to other nodes
 	private List<Road> connections;
 
-	public Town()
-	{
-		this.connections = new LinkedList<Road>();
+	public Town() {
+		this.connections = new ArrayList<Road>();
 	}
 
 	public String getName() {
@@ -27,47 +26,41 @@ public class Town
 		this.name = name;
 	}
 
-	public void addConnection(Road n2)
-	{
-		if ((!this.connections.contains(n2.getTown1())) || !(this.connections.contains(n2.getTown2())))
-		{
-			this.connections.add(n2);
-			n2.getTown2().addConnection(new Road(n2.getTown2(), this, n2.getDistnace()));
+	public void addConnection(Road road) {
+		if (!this.connections.contains(road)) {
+		    this.connections.add(road);
+			road.getTown2().connections.add(road);
 		}
 	}
 
-	public void removeConnection(Road n2) {
-		if (this.connections.contains(n2))
-		{
-			this.connections.remove(n2);
-			n2.getTown2().removeConnection(new Road(n2.getTown2(), this, n2.getDistnace()));
+	public void removeConnection(Road road) {
+		if (this.connections.contains(road)) {
+			this.connections.remove(road);
+			road.getTown2().connections.remove(road);
 		}
 	}
-
-	//get index position of the vertex
-/*	public int getPosition(List<Town> townList) {
-		if (townList.indexOf(this) == -1)
-			townList.add(this);
-
-		return townList.indexOf(this);
-	}*/
 
 	public List<Road> getConnections() {
 
-		List<Road> list = new LinkedList<>();
+		ArrayList<Road> list = new ArrayList<>();
 		Iterator<Road> i = connections.listIterator();
-	    while (i.hasNext())
-	    {
-	        Road n = i.next();
-	        list.add(n);
-	    }
+		while (i.hasNext()) {
+			Road n = i.next();
+			if (!list.contains(n)) { 
+				list.add(n);
+			}
+		}
 		return list;
 	}
 
 	@Override
-	public boolean equals(Object other)
-	{
-		return (other instanceof Town && other == this);
+	public boolean equals(Object other) {
+		   if (other instanceof Town) {
+	            if (name.equals(((Town) other).name)) {
+	                return true;
+	            }
+	        }
+	        return false;
 	}
 
 	@Override
